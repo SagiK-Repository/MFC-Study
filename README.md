@@ -5,7 +5,7 @@
 
 ### 목표
 - [x] : [1. Hello SDK](https://github.com/SagiK-Repository/MFC-Study/tree/main/1.%20HelloSDK)
-- [x] : [2. DrawLines](https://github.com/SagiK-Repository/MFC-Study/tree/main/2.%20DrawLines)
+- [x] : [2. Draw Graph](https://github.com/SagiK-Repository/MFC-Study/tree/main/2.%20DrawLines)
 - [x] : [3. MFC Puzzle](https://github.com/SagiK-Repository/MFC-Study/tree/main/3.%20MFCPuzzle)
 - [x] : [4. MFC Study](https://github.com/SagiK-Repository/MFC-Study/tree/main/4.%20MFCGateDraw)
 - [ ] : 5. MFC Paint
