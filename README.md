@@ -4,10 +4,10 @@
 -  목적
 
 ### 목표
-- [x] : [1. Hello SDK](https://github.com/SagiK-Repository/MFC-Study/tree/main/1.%20HelloSDK)
-- [x] : [2. Draw Graph](https://github.com/SagiK-Repository/MFC-Study/tree/main/2.%20DrawLines)
-- [x] : [3. MFC Puzzle](https://github.com/SagiK-Repository/MFC-Study/tree/main/3.%20MFCPuzzle)
-- [x] : [4. MFC Study](https://github.com/SagiK-Repository/MFC-Study/tree/main/4.%20MFCGateDraw)
+- [x] : [1. Hello SDK](https://github.com/SagiK-Repository/MFC-Study/tree/main/1.%20HelloSDK) [07.01.]
+- [x] : [2. Draw Graph](https://github.com/SagiK-Repository/MFC-Study/tree/main/2.%20DrawLines) [07.02.]
+- [x] : [3. MFC Puzzle](https://github.com/SagiK-Repository/MFC-Study/tree/main/3.%20MFCPuzzle) [07.21.]
+- [x] : [4. MFC Study](https://github.com/SagiK-Repository/MFC-Study/tree/main/4.%20MFCGateDraw) [08.12.]
 - [ ] : 5. MFC Paint
 - [ ] : 6. MFC Function Generator
 - [ ] : 7. MFC Caculator
