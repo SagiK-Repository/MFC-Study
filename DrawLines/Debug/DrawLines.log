@@ -1,6 +1,0 @@
-﻿  ChildView.cpp
-C:\Users\pleasing\source\repos\DrawLines\ChildView.cpp(55): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\pleasing\source\repos\DrawLines\ChildView.cpp(56): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\pleasing\source\repos\DrawLines\ChildView.cpp(57): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\pleasing\source\repos\DrawLines\ChildView.cpp(58): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  DrawLines.vcxproj -> C:\Users\pleasing\source\repos\DrawLines\Debug\DrawLines.exe
