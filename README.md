@@ -1,2 +1,2 @@
-# MFCStudy
+# MFC-Study
 MFC Course
