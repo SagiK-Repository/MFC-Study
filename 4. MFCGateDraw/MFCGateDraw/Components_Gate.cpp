@@ -20,9 +20,9 @@ void Components_Gate::setGateType(GateType type)
 	case NAND:w = 150; h = 80; break;  //IN 0,1 OUT 3
 	case NOR :w = 150; h = 80; break;  //IN 0,1 OUT 3
 	case XNOR:w = 150; h = 80; break;  //IN 0,1 OUT 3
-	case JUNCTION:w = 15; h = 15; break;//IN 0   OUT 3,4,5
-	case Gate_INPUT:w = 60; h = 30; break;  //IN     OUT 3
-	case Gate_OUTPUT:w = 60; h = 30; break; //IN 0   OUT 
+	case JUNCTION:w = 75; h = 75; break;//IN 0   OUT 3,4,5
+	case Gate_INPUT:w = 60; h = 30; showNumber = false; break;  //IN     OUT 3
+	case Gate_OUTPUT:w = 60; h = 30; showNumber = false; break; //IN 0   OUT 
 	case TEXT:w = 100; h = 40; break;
 	default:gate_type = NONE; w = 0, h = 0; break;
 	}
@@ -42,8 +42,8 @@ void Components_Gate::setGateType(GateType type)
 	}
 
 	if (gate_type != NONE) {
-
-		pins = (Pin*)malloc(sizeof(Pin) * 6);
+		pinCount = 6;
+		pins = (Pin*)malloc(sizeof(Pin) * pinCount);
 
 		pins[0] = Pin(this);
 		pins[0].isSource = false;
@@ -63,6 +63,7 @@ void Components_Gate::setGateType(GateType type)
 		pins[5] = Pin(this);
 		pins[5].isSource = true;
 	}
+	else pinCount = 0;
 }
 
 
@@ -84,8 +85,8 @@ void Components_Gate::drawNOT(CPaintDC* pDC, int x1, int y1, int x2, int y2, Pin
 	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
 	CPen* oldpen = pDC->SelectObject(&pen);
 
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports[0].isSource, true, ports[0].PinState,drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.65) + height / 4, rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports[3].isSource, true, ports[3].PinState, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports+0, true ,drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.65) + height / 4, rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports+3, false, drawpin);
 
 	POINT points3[] = { {rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.0)},
 						{rateOfP1P2(x1,width,0.65),rateOfP1P2(y1,height,0.5)},
@@ -108,9 +109,9 @@ void Components_Gate::drawAND(CPaintDC * pDC, int x1, int y1, int x2, int y2, Pi
 	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
 	CPen* oldpen = pDC->SelectObject(&pen);
 
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.3), rateOfP1P2(y1, height, 0.3), height / 4, ports[0].isSource, true, ports[0].PinState,drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.7), rateOfP1P2(y1, height, 0.7), height / 4, ports[1].isSource, true, ports[1].PinState,drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.75), rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports[3].isSource, true, ports[3].PinState,drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.3), rateOfP1P2(y1, height, 0.3), height / 4, ports+0, true, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.7), rateOfP1P2(y1, height, 0.7), height / 4, ports+1, true, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.75), rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports+3, false,drawpin);
 
 	POINT points5[] = { {rateOfP1P2(x1,width,0.35),rateOfP1P2(y1,height,0.0)},
 						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.0)},
@@ -137,9 +138,9 @@ void Components_Gate::drawOR(CPaintDC * pDC, int x1, int y1, int x2, int y2, Pin
 	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
 	CPen* oldpen = pDC->SelectObject(&pen);
 
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.24), rateOfP1P2(y1, height, 0.3), rateOfP1P2(y1, height, 0.3), height / 4, ports[0].isSource, true, ports[0].PinState,drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.24), rateOfP1P2(y1, height, 0.7), rateOfP1P2(y1, height, 0.7), height / 4, ports[1].isSource, true, ports[1].PinState,drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.75), rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports[3].isSource, true, ports[3].PinState,drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.24), rateOfP1P2(y1, height, 0.3), rateOfP1P2(y1, height, 0.3), height / 4, ports + 0, true, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.24), rateOfP1P2(y1, height, 0.7), rateOfP1P2(y1, height, 0.7), height / 4, ports + 1, true, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.75), rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports + 3, false, drawpin);
 
 	pDC->Arc(rateOfP1P2(x1, width, 0.05)
 		, rateOfP1P2(y1, height, 0.0)
@@ -189,9 +190,9 @@ void Components_Gate::drawNAND(CPaintDC * pDC, int x1, int y1, int x2, int y2, P
 	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
 	CPen* oldpen = pDC->SelectObject(&pen);
 
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.3), rateOfP1P2(y1, height, 0.3), height / 4, ports[0].isSource, true, ports[0].PinState, drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.7), rateOfP1P2(y1, height, 0.7), height / 4, ports[1].isSource, true, ports[1].PinState, drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.65) + height / 4, rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports[3].isSource, true, ports[3].PinState, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.3), rateOfP1P2(y1, height, 0.3), height / 4, ports + 0, true, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.7), rateOfP1P2(y1, height, 0.7), height / 4, ports + 1, true, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.65) + height / 4, rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports + 3, false, drawpin);
 
 	POINT points5[] = { {rateOfP1P2(x1,width,0.35),rateOfP1P2(y1,height,0.0)},
 						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.0)},
@@ -223,9 +224,9 @@ void Components_Gate::drawNOR(CPaintDC * pDC, int x1, int y1, int x2, int y2, Pi
 	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
 	CPen* oldpen = pDC->SelectObject(&pen);
 
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.24), rateOfP1P2(y1, height, 0.3), rateOfP1P2(y1, height, 0.3), height / 4, ports[0].isSource, true, ports[0].PinState, drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.24), rateOfP1P2(y1, height, 0.7), rateOfP1P2(y1, height, 0.7), height / 4, ports[1].isSource, true, ports[1].PinState, drawpin);
-	drawStateLine(pDC, rateOfP1P2(x1, width, 0.65) + height / 4, rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports[3].isSource, true, ports[3].PinState, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.24), rateOfP1P2(y1, height, 0.3), rateOfP1P2(y1, height, 0.3), height / 4, ports + 0, true, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.0), rateOfP1P2(x1, width, 0.24), rateOfP1P2(y1, height, 0.7), rateOfP1P2(y1, height, 0.7), height / 4, ports + 1, true, drawpin);
+	drawStateLine(pDC, rateOfP1P2(x1, width, 0.65) + height / 4, rateOfP1P2(x1, width, 1.0), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 4, ports + 3, false, drawpin);
 
 	pDC->Arc(rateOfP1P2(x1, width, 0.05)
 		, rateOfP1P2(y1, height, 0.0)
@@ -276,22 +277,29 @@ void Components_Gate::drawXNOR(CPaintDC * pDC, int x1, int y1, int x2, int y2, P
 }
 void Components_Gate::drawJunction(CPaintDC * pDC,int x1, int y1, int x2, int y2, Pin* ports, bool drawpin)
 {
+	int linelen = 30;
+	x1 += linelen; x2 -= linelen; y1 += linelen; y2 -= linelen;
+	POINT middle = { x1 / 2 + x2 / 2,y1 / 2 + y2 / 2 };
+	int diameter = abs(x1 - x2)/2 + abs(y1-y2)/2;
+
 	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
 	CPen* oldpen = pDC->SelectObject(&pen);
 	pDC->Ellipse(x1,y1,x2,y2);
+
+	drawStateLine(pDC, x1 - linelen, x1, middle.y, middle.y, diameter, ports + 0, true, drawpin);
+	drawStateLine(pDC, middle.x, middle.x, y1 - linelen, y1, diameter, ports + 3, true, drawpin);
+	drawStateLine(pDC, x2, x2 + linelen, middle.y, middle.y, diameter, ports + 4, false, drawpin);
+	drawStateLine(pDC, middle.x, middle.x, y2, y2 + linelen, diameter, ports + 5, false, drawpin);
+	
 	pDC->SelectObject(oldpen);
 }
 void Components_Gate::drawINPUT(CPaintDC* pDC, int x1, int y1, int x2, int y2, Pin* ports, bool drawpin)
 {
-	bool state = ports[3].PinState, isInput = ports[3].isSource;
 	int width = x2 - x1, height = y2 - y1;
 	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
 	CPen* oldpen = pDC->SelectObject(&pen);
 
-	drawStateLine(pDC, x2, rateOfP1P2(x1, width, 0.85), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 2, isInput, false, state, true, drawpin);
-	//POINT points1[] = { {rateOfP1P2(x1,width,1.00),rateOfP1P2(y1,height,0.5)},
-	//					{rateOfP1P2(x1,width,0.85),rateOfP1P2(y1,height,0.5)} };
-	//pDC->Polyline(points1, 2);
+	drawStateLine(pDC, x2, rateOfP1P2(x1, width, 0.85), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 2, ports + 3, false, drawpin);
 
 	POINT points3[] = { {rateOfP1P2(x1,width,0.85),rateOfP1P2(y1,height,0.0)},
 						{rateOfP1P2(x1,width,0.25),rateOfP1P2(y1,height,0.0)},
@@ -303,7 +311,7 @@ void Components_Gate::drawINPUT(CPaintDC* pDC, int x1, int y1, int x2, int y2, P
 
 	CString text;
 	COLORREF textColor;
-	if (state) {
+	if (ports[3].PinState) {
 		text = CString("1");
 		textColor = RGB(255, 0, 0);
 	}
@@ -321,15 +329,11 @@ void Components_Gate::drawINPUT(CPaintDC* pDC, int x1, int y1, int x2, int y2, P
 }
 void Components_Gate::drawOUTPUT(CPaintDC* pDC, int x1, int y1, int x2, int y2, Pin* ports, bool drawpin)
 {
-	bool state = ports[0].PinState, isInput = ports[0].isSource;
 	int width = x2 - x1, height = y2 - y1;
 	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
 	CPen* oldpen = pDC->SelectObject(&pen);
 
-	drawStateLine(pDC, x1, rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 2, isInput, false, state, true, drawpin);
-	//POINT points1[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.5)},
-	//					{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.5)} };
-	//pDC->Polyline(points1, 2);
+	drawStateLine(pDC, x1, rateOfP1P2(x1, width, 0.15), rateOfP1P2(y1, height, 0.5), rateOfP1P2(y1, height, 0.5), height / 2, ports + 0, true, drawpin);
 
 	POINT points3[] = { {rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.0)},
 						{rateOfP1P2(x1,width,0.75),rateOfP1P2(y1,height,0.0)},
@@ -341,7 +345,7 @@ void Components_Gate::drawOUTPUT(CPaintDC* pDC, int x1, int y1, int x2, int y2, 
 
 	CString text;
 	COLORREF textColor;
-	if (state) {
+	if (ports[0].PinState) {
 		text = CString("1");
 		textColor = RGB(255, 0, 0);
 	}

@@ -16,5 +16,6 @@ public:
 	POINT getLastPoint();
 	int addPoint(int x, int y);
 	int deletePoint(POINT* pin);
+	int ConnectPinAuto(Pin* pin);
 };
 

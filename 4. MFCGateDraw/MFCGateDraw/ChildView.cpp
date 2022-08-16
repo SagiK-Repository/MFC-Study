@@ -28,40 +28,17 @@ CChildView::CChildView()
 
 	int res = 0;
 	res = AddComponent(new Components_Gate(NOT)); gates[res]->place(110, 0 + 70); gates[res]->showNumber = false;
-	res = AddComponent(new Components_Gate(AND)); gates[res]->place(110, 100 + 70); gates[res]->showNumber = false;
-	res = AddComponent(new Components_Gate(OR)); gates[res]->place(110, 200 + 70); gates[res]->showNumber = false;
-	res = AddComponent(new Components_Gate(XOR)); gates[res]->place(110, 300 + 70); gates[res]->showNumber = false;
-	res = AddComponent(new Components_Gate(NAND)); gates[res]->place(110, 400 + 70); gates[res]->showNumber = false;
-	res = AddComponent(new Components_Gate(NOR)); gates[res]->place(110, 500 + 70); gates[res]->showNumber = false;
-	res = AddComponent(new Components_Gate(XNOR)); gates[res]->place(110, 600 + 70); gates[res]->showNumber = false;
-	res = AddComponent(new Components_Gate(JUNCTION)); gates[res]->place(110, 700 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(AND)); gates[res]->place(110, 80 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(OR)); gates[res]->place(110, 160 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(XOR)); gates[res]->place(110, 240 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(NAND)); gates[res]->place(110, 320 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(NOR)); gates[res]->place(110, 400 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(XNOR)); gates[res]->place(110, 480 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(Gate_INPUT)); gates[res]->place(110, 560 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(Gate_OUTPUT)); gates[res]->place(110, 640 + 70); gates[res]->showNumber = false;
+	res = AddComponent(new Components_Gate(JUNCTION)); gates[res]->place(110, 720 + 70); gates[res]->showNumber = false;
 	res = AddComponent(new Components_Gate(TEXT)); gates[res]->place(110, 800 + 70); gates[res]->w = 150; gates[res]->w = 80; gates[res]->text = _T("Line");
-
-	res = AddComponent(and1 = new Components_Gate(NOR));
-	res = AddComponent(input1 = new Components_Gate(Gate_INPUT));
-	res = AddComponent(input2 = new Components_Gate(Gate_INPUT));
-	res = AddComponent(output1 = new Components_Gate(Gate_OUTPUT));
-
-	res = AddLine(line1 = new Components_Line());
-
-	input1->place(850-and1->w/2-input1->w/2, rateOfP1P2(200-and1->h/2,and1->h,0.3));
-	input2->place(850-and1->w/2-input2->w/2, rateOfP1P2(200-and1->h/2,and1->h,0.7));
-
-	and1->place(850, 200);
-
-	res = Pin::connectPin(&input1->pins[3], &and1->pins[0]);
-	res = Pin::connectPin(&input2->pins[3], &and1->pins[1]);
-
-	res = Pin::connectPin(&line1->pins[0], &and1->pins[3]);
-	line1->place(850 + and1->w / 2, 1050, 200);
-	line1->showNumber = false;
-	res = Pin::connectPin(&line1->pins[1], &output1->pins[0]);
-
-	output1->place(1050 + output1->w / 2, 200);
 	
-	input1->pins[3].processPin();
-	input2->pins[3].processPin();
-
 }
 
 CChildView::~CChildView()
@@ -106,14 +83,6 @@ void CChildView::OnPaint()
 	dc.Rectangle(0, 0, 220, 1000);
 
 
-	drawStateLine(&dc, 500, 600, 25,50, 24,false, true, 1);
-	drawStateLine(&dc, 500, 600, 50,75, 24,true, true, 0,false);
-	drawStateLine(&dc, 500, 600, 75,100, 24,true, false, 1);
-	drawStateLine(&dc, 500, 600, 100,25, 24,false, false, 0,false);
-
-	drawJunction(&dc, 200, 100, 10);
-
-
 	for (int i = 0; i < sizeof(lines) / sizeof(*lines); i++) {
 		if (lines[i] != nullptr)lines[i]->draw(&dc);
 	}
@@ -122,247 +91,6 @@ void CChildView::OnPaint()
 		if (gates[i] != nullptr)gates[i]->draw(&dc);
 	}
 	// Do not call CWnd::OnPaint() for painting messages
-}
-
-
-void CChildView::drawNOT(CPaintDC* pDC, int x1, int y1, int x2, int y2)
-{
-	int width = x2 - x1, height = y2 - y1;
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
-	CPen* oldpen = pDC->SelectObject(&pen);
-
-	POINT points1[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.5)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.5)} };
-	POINT points2[] = { { rateOfP1P2(x1, width, 0.65) + height / 4,rateOfP1P2(y1,height,0.5)},
-						{rateOfP1P2(x1,width,1.0),rateOfP1P2(y1,height,0.5)} };
-	pDC->Polyline(points1, 2);
-	pDC->Polyline(points2, 2);
-
-	POINT points3[] = { {rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.0)},
-						{rateOfP1P2(x1,width,0.65),rateOfP1P2(y1,height,0.5)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,1.0)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.0)} };
-	pDC->Polyline(points3, 4);
-
-	//0.625 0.5
-	pDC->Ellipse(rateOfP1P2(x1, width, 0.65)
-		, rateOfP1P2(y1, height, 0.5) - height / 8
-		, rateOfP1P2(x1, width, 0.65) + height / 4
-		, rateOfP1P2(y1, height, 0.5) + height / 8);
-
-
-	pDC->SelectObject(oldpen);
-}
-void CChildView::drawAND(CPaintDC* pDC, int x1, int y1, int x2, int y2)
-{
-	int width = x2 - x1, height = y2 - y1;
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
-	CPen* oldpen = pDC->SelectObject(&pen);
-
-	POINT points1[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.3)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.3)} };
-	POINT points2[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.7)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.7)} };
-	POINT points3[] = { {rateOfP1P2(x1,width,0.65),rateOfP1P2(y1,height,0.5)},
-						{rateOfP1P2(x1,width,1.0),rateOfP1P2(y1,height,0.5)} };
-	pDC->Polyline(points1, 2);
-	pDC->Polyline(points2, 2);
-	pDC->Polyline(points3, 2);
-
-	POINT points5[] = { {rateOfP1P2(x1,width,0.35),rateOfP1P2(y1,height,0.0)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.0)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,1.0)},
-						{rateOfP1P2(x1,width,0.35),rateOfP1P2(y1,height,1.0)} };
-	pDC->Polyline(points5, 4);
-
-	//0.625 0.5
-	pDC->Arc(rateOfP1P2(x1, width, 0.05)
-		, rateOfP1P2(y1, height, 0.0)
-		, rateOfP1P2(x1, width, 0.65)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.35)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.35)
-		, rateOfP1P2(y1, height, 0.0));
-
-
-	pDC->SelectObject(oldpen);
-}
-void CChildView::drawOR(CPaintDC* pDC, int x1, int y1, int x2, int y2)
-{
-	int width = x2 - x1, height = y2 - y1;
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
-	CPen* oldpen = pDC->SelectObject(&pen);
-
-	POINT points1[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.3)},
-						{rateOfP1P2(x1,width,0.24),rateOfP1P2(y1,height,0.3)} };
-	POINT points2[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.7)},
-						{rateOfP1P2(x1,width,0.24),rateOfP1P2(y1,height,0.7)} };
-	POINT points3[] = { {rateOfP1P2(x1,width,0.65),rateOfP1P2(y1,height,0.5)},
-						{rateOfP1P2(x1,width,1.0),rateOfP1P2(y1,height,0.5)} };
-	pDC->Polyline(points1, 2);
-	pDC->Polyline(points2, 2);
-	pDC->Polyline(points3, 2);
-
-	pDC->Arc(rateOfP1P2(x1, width, 0.05)
-		, rateOfP1P2(y1, height, 0.0)
-		, rateOfP1P2(x1, width, 0.25)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15)
-		, rateOfP1P2(y1, height, 0.0));
-
-	pDC->Arc(rateOfP1P2(x1, width, -0.35)
-		, rateOfP1P2(y1, height, 0.0)
-		, rateOfP1P2(x1, width, 0.65)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15)
-		, rateOfP1P2(y1, height, 0.0));
-
-
-	pDC->SelectObject(oldpen);
-}
-void CChildView::drawXOR(CPaintDC* pDC, int x1, int y1, int x2, int y2)
-{
-	int width = x2 - x1, height = y2 - y1;
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
-
-	drawOR(pDC, x1, y1, x2, y2);
-
-	CPen* oldpen = pDC->SelectObject(&pen);
-
-	pDC->Arc(rateOfP1P2(x1, width, 0.05) - height/8
-		, rateOfP1P2(y1, height, 0.0)
-		, rateOfP1P2(x1, width, 0.25) - height/8
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15) - height/8
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15) - height/8
-		, rateOfP1P2(y1, height, 0.0));
-
-
-	pDC->SelectObject(oldpen);
-}
-void CChildView::drawNAND(CPaintDC* pDC, int x1, int y1, int x2, int y2)
-{
-	int width = x2 - x1, height = y2 - y1;
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
-	CPen* oldpen = pDC->SelectObject(&pen);
-
-	POINT points1[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.3)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.3)} };
-	POINT points2[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.7)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.7)} };
-	POINT points3[] = { {rateOfP1P2(x1,width,0.65)+height/4,rateOfP1P2(y1,height,0.5)},
-						{rateOfP1P2(x1,width,1.0),rateOfP1P2(y1,height,0.5)} };
-	pDC->Polyline(points1, 2);
-	pDC->Polyline(points2, 2);
-	pDC->Polyline(points3, 2);
-
-	POINT points5[] = { {rateOfP1P2(x1,width,0.35),rateOfP1P2(y1,height,0.0)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,0.0)},
-						{rateOfP1P2(x1,width,0.15),rateOfP1P2(y1,height,1.0)},
-						{rateOfP1P2(x1,width,0.35),rateOfP1P2(y1,height,1.0)} };
-	pDC->Polyline(points5, 4);
-
-	//0.625 0.5
-	pDC->Arc(rateOfP1P2(x1, width, 0.05)
-		, rateOfP1P2(y1, height, 0.0)
-		, rateOfP1P2(x1, width, 0.65)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.35)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.35)
-		, rateOfP1P2(y1, height, 0.0));
-
-	//0.625 0.5
-	pDC->Ellipse(rateOfP1P2(x1, width, 0.65)
-		, rateOfP1P2(y1, height, 0.5) - height / 8
-		, rateOfP1P2(x1, width, 0.65) + height / 4
-		, rateOfP1P2(y1, height, 0.5) + height / 8);
-
-	pDC->SelectObject(oldpen);
-}
-void CChildView::drawNOR(CPaintDC* pDC, int x1, int y1, int x2, int y2)
-{
-	int width = x2 - x1, height = y2 - y1;
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
-	CPen* oldpen = pDC->SelectObject(&pen);
-
-	POINT points1[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.3)},
-						{rateOfP1P2(x1,width,0.24),rateOfP1P2(y1,height,0.3)} };
-	POINT points2[] = { {rateOfP1P2(x1,width,0.0),rateOfP1P2(y1,height,0.7)},
-						{rateOfP1P2(x1,width,0.24),rateOfP1P2(y1,height,0.7)} };
-	POINT points3[] = { {rateOfP1P2(x1,width,0.65)+height/4,rateOfP1P2(y1,height,0.5)},
-						{rateOfP1P2(x1,width,1.0),rateOfP1P2(y1,height,0.5)} };
-	pDC->Polyline(points1, 2);
-	pDC->Polyline(points2, 2);
-	pDC->Polyline(points3, 2);
-
-	pDC->Arc(rateOfP1P2(x1, width, 0.05)
-		, rateOfP1P2(y1, height, 0.0)
-		, rateOfP1P2(x1, width, 0.25)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15)
-		, rateOfP1P2(y1, height, 0.0));
-
-	pDC->Arc(rateOfP1P2(x1, width, -0.35)
-		, rateOfP1P2(y1, height, 0.0)
-		, rateOfP1P2(x1, width, 0.65)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15)
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15)
-		, rateOfP1P2(y1, height, 0.0));
-
-	//0.625 0.5
-	pDC->Ellipse(rateOfP1P2(x1, width, 0.65)
-		, rateOfP1P2(y1, height, 0.5) - height / 8
-		, rateOfP1P2(x1, width, 0.65) + height / 4
-		, rateOfP1P2(y1, height, 0.5) + height / 8);
-
-	pDC->SelectObject(oldpen);
-}
-void CChildView::drawXNOR(CPaintDC * pDC, int x1, int y1, int x2, int y2)
-{
-	int width = x2 - x1, height = y2 - y1;
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
-
-	drawNOR(pDC, x1, y1, x2, y2);
-
-	CPen* oldpen = pDC->SelectObject(&pen);
-
-	pDC->Arc(rateOfP1P2(x1, width, 0.05) - height / 8
-		, rateOfP1P2(y1, height, 0.0)
-		, rateOfP1P2(x1, width, 0.25) - height / 8
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15) - height / 8
-		, rateOfP1P2(y1, height, 1.0)
-		, rateOfP1P2(x1, width, 0.15) - height / 8
-		, rateOfP1P2(y1, height, 0.0));
-
-
-	pDC->SelectObject(oldpen);
-}
-void CChildView::drawStateLine(CPaintDC* pDC, int x1, int x2, int y1,int y2,int h,bool isInput , bool isLeft, bool state, bool isAbove) {
-	Components::drawStateLine(pDC, x1, x2, y1,y2, h, isInput, isLeft, state, isAbove);
-}
-void CChildView::drawJunction(CPaintDC* pDC, int x1, int y1, int size)
-{
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 0));
-	CPen* oldpen = pDC->SelectObject(&pen);
-
-	pDC->Ellipse(x1 - size
-		, y1 - size
-		, x1 + size
-		, y1 + size);
-
-	pDC->SelectObject(oldpen);
 }
 
 
@@ -407,6 +135,9 @@ int CChildView::DeleteLine(Components_Line* line)
 {
 	for (int i = 0; i < lineCount; i++) {
 		if (lines[i] == line) {
+			for (int i = 0; i < line->pinCount; i++) {
+				line->pins[i].deletePin();
+			}
 			delete lines[i];
 			lines[i] = nullptr;
 			return 0;
@@ -424,13 +155,14 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 			for (int i = 0; i < sizeof(gates) / sizeof(*gates); i++)
 				if (gates[i] != nullptr)
 					if (gates[i]->isClick(point.x, point.y)) {
+						// Adding gates
 						if (gates[i]->gate_type != TEXT) {
 							i = AddComponent(new Components_Gate(gates[i]->gate_type));
 							if (i < 0)break;
 							selectedGate = gates[i];
 							selectedGate->place(point.x, point.y);
 						}
-						else {
+						else {// Adding Line
 							i = AddLine(new Components_Line());
 							if (i < 0)break;
 							selectedLine = lines[i];
@@ -456,11 +188,44 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 				isSelected = false;
 				Invalidate();
 			}
-			else if (selectedLine != nullptr) {
-				if(selectedLine->len == 0)
-					selectedLine->addPoint(point.x, point.y);
+			else if (selectedLine != nullptr) { // connecting line
+				Pin* pinNearest = findNearestPin(gates, point, 30.f);
 
-				selectedLine->addPoint(point.x, point.y);
+				if (pinNearest != nullptr) {
+					if (selectedLine->len == 0) {// first input
+
+						 // if there's no pins around here
+						//cancels the click.
+
+						//if there's pin around here
+						int res = selectedLine->ConnectPinAuto(pinNearest);
+						if (res != 0) {
+							MessageBox(L"Fail. Already Connected or PinType Mismatch.");
+						}
+						else {
+							selectedLine->addPoint(pinNearest->pinX, pinNearest->pinY);
+
+							selectedLine->addPoint(point.x, point.y);
+						}
+					}
+					else // last input(line termination)
+					{
+						int res = selectedLine->ConnectPinAuto(pinNearest);
+						if (res != 0) { // if connect fails
+							MessageBox(L"Fail. Already Connected or PinType Mismatch.");
+						}
+						else {
+							selectedLine->setLastPoint(pinNearest->pinX, pinNearest->pinY);
+							selectedLine->pins[0].processPin(); // bring the state of input.
+							Invalidate();
+							selectedLine = nullptr;
+							isSelected = false;
+						}
+					}
+				}
+
+				if(selectedLine != nullptr && selectedLine->len > 0 && pinNearest == nullptr)
+					selectedLine->addPoint(point.x, point.y);
 			}
 	}
 
@@ -505,14 +270,34 @@ void CChildView::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 	}
 	else {
-		if (selectedLine != nullptr) {
+		if (selectedLine != nullptr) { // termination in middle'
+			//delete the line.
+
+			DeleteLine(selectedLine);
+			selectedLine = nullptr;
+			isSelected = false;
+			Invalidate();
+
+			/*
 			selectedLine->setLastPoint(point.x, point.y);
+			
 			int i = AddComponent(new Components_Gate(JUNCTION));
 			if (i > 0) {
 				gates[i]->place(point.x, point.y);
 			}
+			if (selectedLine->pins[0].pinFrom == nullptr) { // input is empty
+				
+			}
+			else if (selectedLine->pins[1].pinTo == nullptr) {
+
+			}
+			else {
+				//No pins are remaind. invalid state.
+				MessageBox(L"ERROR.");
+			}
 			selectedLine = nullptr;
 			isSelected = false;
+			*/
 			//두 핀을 연결하는 내용을 만든다.
 		}
 	}
@@ -538,4 +323,23 @@ void CChildView::OnRButtonDblClk(UINT nFlags, CPoint point)
 	}
 
 	CWnd::OnRButtonDblClk(nFlags, point);
+}
+
+
+Pin* CChildView::findNearestPin(Components_Gate** gates, POINT point, float threshold)
+{
+	Pin* pinptr = nullptr;
+	for (int i = 0; gates[i] != nullptr; i++) {
+		for (int j = 0; j < gates[i]->pinCount; j++) {
+			if (gates[i]->pins[j].pinX == 0 && gates[i]->pins[j].pinY == 0)continue;
+
+			float dist = sqrtf( powf(point.x-gates[i]->pins[j].pinX,2.f) + powf(point.y-gates[i]->pins[j].pinY,2.f) );
+			if (dist < threshold) {
+				threshold = dist;
+				pinptr = gates[i]->pins + j;
+			}
+		}
+	}
+
+	return pinptr;
 }

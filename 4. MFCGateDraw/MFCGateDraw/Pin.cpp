@@ -8,7 +8,10 @@ Pin::Pin(void* parent)
 	pinFrom = nullptr;
 	pinTo = nullptr;
 	this->parent = parent;
-	PinState = 0;
+	PinState = false;
+	pinX = 0;
+	pinY = 0;
+	isSource = false;
 }
 
 
@@ -50,4 +53,16 @@ int Pin::connectPin(Pin* pin1, Pin* pin2)
 bool Pin::isBound()
 {
 	return (pinFrom != nullptr || pinTo != nullptr);
+}
+
+
+int Pin::deletePin()
+{
+	if (pinTo != nullptr) {
+		pinTo->pinFrom = nullptr;
+	}
+	if (pinFrom != nullptr) {
+		pinFrom->pinTo = nullptr;
+	}
+	return 0;
 }

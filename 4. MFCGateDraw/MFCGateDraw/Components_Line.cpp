@@ -4,7 +4,8 @@
 
 Components_Line::Components_Line()
 {
-	pins = (Pin*)malloc(sizeof(Pin)*2);
+	pinCount = 2;
+	pins = (Pin*)malloc(sizeof(Pin)*pinCount);
 	pins[0] = Pin(this);
 	pins[0].isSource = false;// input
 
@@ -14,6 +15,7 @@ Components_Line::Components_Line()
 	size = 5;
 	point = (POINT*)malloc(sizeof(POINT)*size);
 	len = 0;
+	showNumber = false;
 }
 
 
@@ -26,17 +28,18 @@ Components_Line::~Components_Line()
 int Components_Line::draw(CPaintDC* pDC)
 {
 	if (len == 1) {
-		drawStateLine(pDC, x, x, y, y, 40, false, true, pins[0].PinState, showNumber);
-		drawStateLine(pDC, x + w, x + w, y + h, y + h, 40, true, false, pins[0].PinState, showNumber);
+		drawStateLine(pDC, x, x, y, y, 30, false, true, pins[0].PinState, showNumber);
+		drawStateLine(pDC, x + w, x + w, y + h, y + h, 30, true, false, pins[0].PinState, showNumber);
 	}
 	else if (len == 2) {
-		drawStateLine(pDC, point[0].x, point[1].x/2+ point[0].x/2, point[0].y, point[1].y/2+ point[0].y/2, 40, false, true, pins[0].PinState, showNumber);
-		drawStateLine(pDC, point[1].x/2+ point[0].x/2, point[0].y, point[1].x/2+ point[0].x/2, point[1].y, 40, true, false, pins[0].PinState, showNumber);
+		POINT middle = { point[1].x / 2 + point[0].x / 2 , point[1].y / 2 + point[0].y / 2 };
+		drawStateLine(pDC, point[0].x, middle.x  , point[0].y, middle.y  , 30, pins+0, true, showNumber);
+		drawStateLine(pDC, middle.x  , point[1].x, middle.y  , point[1].y, 30, pins+1, false, showNumber);
 	}
 	else if(len > 2){
-		drawStateLine(pDC, point[0].x, point[1].x, point[0].y, point[1].y, 40, false, true, pins[0].PinState, showNumber);
+		drawStateLine(pDC, point[0].x, point[1].x, point[0].y, point[1].y, 30, pins + 0, true, showNumber);
 		pDC->Polyline(point+1, len-1);
-		drawStateLine(pDC, point[len-2].x, point[len-1].x, point[len-2].y, point[len-1].y, 40, true, false, pins[0].PinState, showNumber);
+		drawStateLine(pDC, point[len-2].x, point[len-1].x, point[len-2].y, point[len-1].y, 30, pins + 1, false, showNumber);
 	}
 	return 0;
 }
@@ -113,4 +116,24 @@ int Components_Line::deletePoint(POINT* pin)
 		}
 	}
 	return 1;
+}
+
+
+int Components_Line::ConnectPinAuto(Pin* pin)
+{
+	if (pin->isSource) {
+		if (pins[0].pinFrom == nullptr && pin->pinTo == nullptr) {
+			pins[0].pinFrom = pin;
+			pin->pinTo = pins + 0;
+		}
+		else return 1;
+	}
+	else {
+		if (pins[1].pinTo == nullptr && pin->pinFrom == nullptr) {
+			pins[1].pinTo = pin;
+			pin->pinFrom = pins + 1;
+		}
+		else return 1;
+	}
+	return 0;
 }

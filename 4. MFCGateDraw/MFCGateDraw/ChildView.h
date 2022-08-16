@@ -66,5 +66,6 @@ public:
 	int DeleteLine(Components_Line* line);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDblClk(UINT nFlags, CPoint point);
+	Pin* findNearestPin(Components_Gate** gates, POINT point, float threshold);
 };
 
