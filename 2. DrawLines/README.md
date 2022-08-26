@@ -2,7 +2,6 @@
 
 문서정보 : 2022.08.13. 작성, 작성자 [@ttkpark](https://github.com/ttkpark)
 
-실습링크 : [함수발생기 제작](https://cafe.daum.net/smhan/f1YW/3)
 ![image](https://user-images.githubusercontent.com/86010770/184469559-9623b84d-9a6e-4231-8627-3fb9d446e9e8.png)
 
 # 목차
