@@ -8,7 +8,7 @@
 - [x] : [2. Draw Graph](https://github.com/SagiK-Repository/MFC-Study/tree/main/2.%20DrawLines) [07.02.]
 - [x] : [3. MFC Puzzle](https://github.com/SagiK-Repository/MFC-Study/tree/main/3.%20MFCPuzzle) [07.21.]
 - [x] : [4. MFC Circuit Drawing](https://github.com/SagiK-Repository/MFC-Study/tree/main/4.%20MFCGateDraw) [08.16.]
-- [ ] : 5. MFC Paint
+- [x] : [5. MFC Paint](https://github.com/SagiK-Repository/MFC-Study/tree/main/5.%20Painter) [09.12]
 - [ ] : 6. MFC Function Generator
 - [ ] : 7. MFC Caculator
 - [ ] : 8. MFC Spring
